@@ -1,10 +1,14 @@
 package br.com.barbershop.service;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import br.com.barbershop.exception.AppBusinessException;
 import br.com.barbershop.model.Client;
-import org.springframework.stereotype.Service;
 
 @Service
 public interface ClientService {
-    Client createWithEmail(Client client) throws AppBusinessException;
+    Client create(Client client) throws AppBusinessException;
+    Optional<Client> findByPhone(String phonenumber);
 }

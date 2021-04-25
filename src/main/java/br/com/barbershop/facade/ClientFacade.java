@@ -1,7 +1,7 @@
 package br.com.barbershop.facade;
 
+import br.com.barbershop.enums.LoginMethodEnum;
 import br.com.barbershop.model.Client;
-import br.com.barbershop.model.Roles;
 
 public class ClientFacade {
 
@@ -12,7 +12,8 @@ public class ClientFacade {
     private String lastName;
     private String password;
     private boolean enabled;
-
+    private String username;
+    private LoginMethodEnum loginMethod;
 
     public Client toClient() {
         return new Client(
@@ -81,4 +82,22 @@ public class ClientFacade {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
+	public LoginMethodEnum getLoginMethod() {
+		return loginMethod;
+	}
+
+	public void setLoginMethod(LoginMethodEnum loginMethod) {
+		this.loginMethod = loginMethod;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+    
+    
 }

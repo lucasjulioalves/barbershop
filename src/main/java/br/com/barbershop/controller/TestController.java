@@ -13,7 +13,7 @@ public class TestController {
         return "testando...";
     }
 
-    @PreAuthorize("hasAuthority('SU') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/test/admin")
     public String hey2() {
         return "testando...";

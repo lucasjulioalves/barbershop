@@ -1,11 +1,11 @@
 package br.com.barbershop.exception;
 
-import br.com.barbershop.facade.MessageFacade;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import br.com.barbershop.facade.MessageFacade;
 
 @ControllerAdvice
 public class AppBussinessExceptionAdvice extends ResponseEntityExceptionHandler {

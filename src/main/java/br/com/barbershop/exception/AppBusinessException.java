@@ -1,7 +1,10 @@
 package br.com.barbershop.exception;
 
 public class AppBusinessException extends Exception{
-    public AppBusinessException(String exception) {
+
+	private static final long serialVersionUID = -7743838440102290744L;
+
+	public AppBusinessException(String exception) {
         super(exception);
     }
 }
