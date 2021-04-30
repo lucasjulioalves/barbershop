@@ -32,7 +32,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         try {
             String jwt = parseJwt(request);
             if (jwtUtils.validateJwtToken(jwt)) {
-                String id = jwtUtils.getCLientIdByToken(jwt);
+                String id = jwtUtils.getClientIdByToken(jwt);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(id);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,

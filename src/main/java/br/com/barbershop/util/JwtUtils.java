@@ -31,7 +31,7 @@ public class JwtUtils {
                 .compact();
     }
 
-    public String getCLientIdByToken(String token) {
+    public String getClientIdByToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 
