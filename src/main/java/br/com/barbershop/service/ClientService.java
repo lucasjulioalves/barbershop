@@ -11,4 +11,6 @@ import br.com.barbershop.model.Client;
 public interface ClientService {
     Client create(Client client) throws AppBusinessException;
     Optional<Client> findByPhone(String phonenumber);
+    boolean isTwoFactorAuthEnabled(String username);
+    Optional<Client> findByEmailOrPhone(String username);
 }

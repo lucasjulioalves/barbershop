@@ -3,11 +3,12 @@ package br.com.barbershop.model;
 import br.com.barbershop.enums.RoleEnum;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Client {
+public class Client implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +20,7 @@ public class Client {
     private String lastName;
     private String password;
     private boolean enabled;
+    private boolean twoFactorAuthEnabled;
 
     public Client() {
 
@@ -41,6 +43,45 @@ public class Client {
         this.enabled = enabled;
     }
 
+    public Client withId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public Client withEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public Client withPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        return this;
+    }
+
+    public Client withName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public Client withLastName(String lastName) {
+        this.lastName = lastName;
+        return this;
+    }
+
+    public Client withPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public Client withEnabled(boolean enabled) {
+        this.enabled = enabled;
+        return this;
+    }
+
+    public Client withTwoFactorAuthEnabled(boolean twoFactorAuthEnabled) {
+        this.twoFactorAuthEnabled = twoFactorAuthEnabled;
+        return this;
+    }
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Roles> roles = new ArrayList<>();
 
@@ -107,9 +148,19 @@ public class Client {
         this.roles = roles;
     }
 
+    public boolean isTwoFactorAuthEnabled() {
+        return twoFactorAuthEnabled;
+    }
+
+    public void setTwoFactorAuthEnabled(boolean twoFactorAuthEnabled) {
+        this.twoFactorAuthEnabled = twoFactorAuthEnabled;
+    }
+
     public void addRole(RoleEnum roleEnum) {
         Roles role = new Roles();
         role.setRole(roleEnum);
         this.roles.add(role);
     }
+
+
 }

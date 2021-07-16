@@ -2,13 +2,14 @@ package br.com.barbershop.service.impl;
 
 import java.util.Optional;
 
+import br.com.barbershop.facade.validation.ClientValidationRulesFacade;
+import br.com.barbershop.facade.validation.builder.ClientValidationRulesFacadeBuilder;
+import br.com.barbershop.helper.ClientCrudHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.barbershop.enums.RoleEnum;
 import br.com.barbershop.exception.AppBusinessException;
-import br.com.barbershop.helper.ClientHelper;
+import br.com.barbershop.helper.ClientCrudValidationHelper;
 import br.com.barbershop.model.Client;
 import br.com.barbershop.repository.ClientRepository;
 import br.com.barbershop.service.ClientService;
@@ -18,22 +19,25 @@ public class ClientServiceImpl implements ClientService {
 
     private ClientRepository clientRepository;
 
-    private PasswordEncoder passwordEncoder;
+    private ClientCrudHelper clientCrudHelper;
+
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository, PasswordEncoder passwordEncoder) {
+    public ClientServiceImpl(ClientRepository clientRepository, ClientCrudHelper clientCrudHelper) {
         this.clientRepository = clientRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.clientCrudHelper = clientCrudHelper;
     }
 
     @Override
     public Client create(Client client) throws AppBusinessException {
-    	ClientHelper.isValidForCreation(client);
-        if(clientRepository.existsByEmail(client.getEmail())) {
-            throw new AppBusinessException("Email already taken for use");
-        }
-        final String encodedPassword = passwordEncoder.encode(client.getPassword());
-        client.setPassword(encodedPassword);
-        client.addRole(RoleEnum.SU);
+        final ClientValidationRulesFacade clientValidationRulesFacade = new ClientValidationRulesFacadeBuilder()
+                        .begin()
+                        .withClientInstance(client)
+                        .isEmailAlreadyBeingUsed(clientRepository.existsByEmail(client.getEmail()))
+                        .build();
+
+    	ClientCrudValidationHelper.isValidForCreation(clientValidationRulesFacade);
+        clientCrudHelper.prepareClientInstanceForCreation(client);
+
         return clientRepository.save(client);
     }
 
@@ -41,5 +45,25 @@ public class ClientServiceImpl implements ClientService {
 	public Optional<Client> findByPhone(String phonenumber) {
 		return clientRepository.findByPhoneNumber(phonenumber);
 	}
-    
+
+    @Override
+    public boolean isTwoFactorAuthEnabled(String username) {
+
+        return findByEmailOrPhone(username)
+                .get()
+                .isTwoFactorAuthEnabled();
+    }
+
+    @Override
+    public Optional<Client> findByEmailOrPhone(String username) {
+
+        Optional<Client> client;
+        client = clientRepository.findByEmail(username);
+
+        if(client.isEmpty()) {
+            client = clientRepository.findByPhoneNumber(username);
+        }
+
+        return client;
+    }
 }
