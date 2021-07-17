@@ -1,4 +1,7 @@
-/target/
-/bin/
-/.project
+/.idea
 /.settings
+/bin
+/target
+.classpath
+.project
+babershop.iml
